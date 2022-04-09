@@ -26,10 +26,9 @@ table = 'employee'
 def home():
     return render_template('AddEmp.html')
 
-
-@app.route("/about", methods=['POST'])
-def about():
-    return render_template('www.intellipaat.com')
+# @app.route("/about", methods=['POST'])
+# def about():
+#     return render_template('about.html', about=about)
 
 @app.route("/getemp", methods=['POST'])
 def GetEmp():
@@ -97,34 +96,34 @@ def DeleteEmp():
         except Exception as e:
             return render_template('DeleteFail.html')
 
-@app.route("/attendanceemp", methods=['GET','POST'])
-def AttendanceEmp():
-    if request.method == "POST":
-        now = datetime.now()
-        datetime_string = now.strftime("%d%m%Y%H%M%S")
-        date_string = now.strftime("%d/%m/%Y")
-        time_string = now.strftime("%H:%M:%S")
+# @app.route("/attendanceemp", methods=['GET','POST'])
+# def AttendanceEmp():
+#     if request.method == "POST":
+#         now = datetime.now()
+#         datetime_string = now.strftime("%d%m%Y%H%M%S")
+#         date_string = now.strftime("%d/%m/%Y")
+#         time_string = now.strftime("%H:%M:%S")
 
-        attendance_id = request.form['attendance_id'] + datetime_string
-        date = request.form['date'] + date_string
-        time = request.form['time'] + time_string
-        attendance = request.form.getlist('attendance')
-        emp_id = request.form['emp_id']
+#         attendance_id = request.form['attendance_id'] + datetime_string
+#         date = request.form['date'] + date_string
+#         time = request.form['time'] + time_string
+#         attendance = request.form.getlist('attendance')
+#         emp_id = request.form['emp_id']
 
-        attendance = ','.join(attendance)
-        att_values = (attendance)
+#         attendance = ','.join(attendance)
+#         att_values = (attendance)
 
-        try:
-            insert_attendance_SQL = 'INSERT INTO attendance VALUES (%s,%s,%s,%s,%s)'
-            cursor = db_conn.cursor()
-            cursor.execute(insert_attendance_SQL, (attendance_id,date,time,att_values,emp_id))
-            db_conn.commit()
+#         try:
+#             insert_attendance_SQL = 'INSERT INTO attendance VALUES (%s,%s,%s,%s,%s)'
+#             cursor = db_conn.cursor()
+#             cursor.execute(insert_attendance_SQL, (attendance_id,date,time,att_values,emp_id))
+#             db_conn.commit()
 
-            return render_template('SuccessAttendance.html', Od = attendance_id)
-            except Exception as e:
-                return str(e)
-            finally:
-                cursor.close()
+#             return render_template('SuccessAttendance.html', Od = attendance_id)
+#             except Exception as e:
+#                 return str(e)
+#             finally:
+#                 cursor.close()
 
 
 @app.route("/addemp", methods=['GET','POST'])
