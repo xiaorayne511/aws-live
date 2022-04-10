@@ -66,7 +66,7 @@ def fetchData():
             else:
                 return render_template('AddEmp.html', fetchdata=fetchdata)
 
-@app.route("/addemp", methods=['GET",'POST'])
+@app.route("/delete-emp", methods=['GET",'POST'])
 def DeleteEmp():
     emp_id = request.form['emp_id']
 
