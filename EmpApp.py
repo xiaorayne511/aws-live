@@ -30,20 +30,20 @@ def home():
 def GetEmp():
     return render_template('GetEmp.html', GetEmp=GetEmp)
 
-def show_image(bucket):
-    s3_client = boto3.client('s3')
-    public_URL = []
+# def show_image(bucket):
+#     s3_client = boto3.client('s3')
+#     public_URL = []
 
-    emp_id = request.form['emp_id']
+#     emp_id = request.form['emp_id']
 
-    try:
-        for item in s3_client.list_objects(Bucket=bucket)['Contents']:
-            presigned_URL = s3._client.generate_presigned_URL('get_object', Params = {'Bucket': bucket, 'Key': item['Key']}, ExpiresIn = 100)
-            if emp_id in presigned_URL:
-                public_URL.append(presigned_URL)
-#         except Exception as e:
-#             pass
-        return public_URL
+#     try:
+#         for item in s3_client.list_objects(Bucket=bucket)['Contents']:
+#             presigned_URL = s3._client.generate_presigned_URL('get_object', Params = {'Bucket': bucket, 'Key': item['Key']}, ExpiresIn = 100)
+#             if emp_id in presigned_URL:
+#                 public_URL.append(presigned_URL)
+#          except Exception as e:
+#              pass
+#         return public_URL
 
 @app.route("/fetchdata", methods=['GET', 'POST'])
 def fetchData():
