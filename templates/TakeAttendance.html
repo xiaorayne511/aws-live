@@ -1,1 +1,31 @@
 
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Add Attendance Information</title>
+</head>
+<center>
+	<font color="black" size="4" style="font-family: avenir">
+
+		<h1 style="color: DodgerBlue">Employee Database</h1>
+
+		<body bgcolor="lightgrey">
+
+			<form action="/addemp" autocomplete="on" method = "POST" enctype="multipart/form-data">
+
+				<button type="submit" formaction="/getemp" style="background: grey; height: 45px; width: 200px; color:white; font:oblique;">GET ATTENDANCE INFORMATION</button><br><br>
+
+		  		Attendance ID:<br> <input style="height:25px;font-size:14pt; color:grey;" type="number" name="attendance_id" autofocus size="40" placeholder="Enter Attendance ID" required><br><br>
+
+		  		Date:<br> <input style="height:25px;font-size:14pt;color:grey;" type="text" name="first_name"placeholder="Enter Date" required><br><br>
+
+		  		Time:<br> <input style="height:25px;font-size:14pt;color:grey;" type="text" name="last_name" placeholder="Enter Time" required><br><br>
+
+		  		<button type="submit" style="background: grey; height: 45px; width: 200px; color: white; size: 5; font:oblique;">UPDATE DATABASE</button>
+
+			</form>
+		</body>
+
+	</font>
+</center>
+</html>
