@@ -73,28 +73,6 @@ def fetchData():
             else:
                 return render_template('AddEmp.html', fetchdata=fetchdata)
 
-@app.route("/delete-emp", methods=['GET",'POST'])
-def DeleteEmp():
-    emp_id = request.form['emp_id']
-
-    mycursor = db_conn.cursor()
-    del_Att_SQL = "DELETE FROM attendance WHERE emp_id = %s"
-    mycursor.execute(del_Att_SQL, (emp_id))
-    db_conn.commit()
-
-    mycursor = db.conn.cursor()
-    del_Att_SQL = "DELETE FROM employee WHERE emp_id = %s"
-    mycursor.execute(del_Att_SQL, (emp_id))
-    db_conn.commit()
-
-    s3_client = boto3.client('s3')
-    emp_image_file_name_in_s3 = "emp-id-" +str(emp_id) + "_image_file" 
-    try:
-        s3_client.delete_object(Bucket=custombucket, Key = emp_image_file_name_in_s3)
-            return render_template('DeleteSuccess.html')
-        except Exception as e:
-            return render_template('DeleteFail.html')
-
 @app.route("/attendanceemp", methods=['GET','POST'])
 def AttendanceEmp():
     if request.method == "POST":
