@@ -41,8 +41,8 @@ def show_image(bucket):
             presigned_URL = s3._client.generate_presigned_URL('get_object', Params = {'Bucket': bucket, 'Key': item['Key']}, ExpiresIn = 100)
             if emp_id in presigned_URL:
                 public_URL.append(presigned_URL)
-        except Exception as e:
-            pass
+#         except Exception as e:
+#             pass
         return public_URL
 
 @app.route("/fetchdata", methods=['GET', 'POST'])
