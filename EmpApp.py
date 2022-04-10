@@ -26,10 +26,6 @@ table = 'employee'
 def home():
     return render_template('AddEmp.html')
 
-# @app.route("/about", methods=['POST'])
-# def about():
-#     return render_template('about.html', about=about)
-
 @app.route("/getemp", methods=['POST'])
 def GetEmp():
     return render_template('GetEmp.html', GetEmp=GetEmp)
@@ -60,15 +56,11 @@ def fetchData():
             cursor.execute(fetch_emp_sql,(emp_id))
             emp = cursor.fetchall()
 
-            (id,fname,lname,priSkill,location) = emp[0]
+            (id,fname,lname,priSkill,location,hiredate,salary,position,phone_no,benefit) = emp[0]
             image_URL = show_image(custombucket)
 
-            #att_emp_sql = "SELECT attendance.date, attendance.time, attendance.att_values FROM attendance INNER JOIN employee ON attendance.emp_id = employee.emp_id WHERE employee.emp_id = %s"
-            #mycursor = db_conn.cursor()
-            #mycursor.execute(att_emp_sql, (emp_id))
-            #att_result = mycursor.fetchall()
-
-            return render_template('GetEmpOutput.html', id=id,fname=fname,lname=lname,priSkill=priSkill,location=location,image_URL=image_URL)
+            return render_template('GetEmpOutput.html', id=id,fname=fname,lname=lname,priSkill=priSkill
+            ,location=location,hiredate=hiredate,salary=salary,position=position,phone_no=phone_no,benefit=benefit,image_URL=image_URL)
             except Exception as e:
                 return render_template('IdNotFound.html')
             else:
@@ -138,17 +130,21 @@ def AddEmp():
         last_name = request.form['last_name']
         pri_skill = request.form['pri_skill']
         location = request.form['location']
+        salary = request.form['salary']
+        position = request.form['position']
+        phone_no = request.form['phone_no']
+        benefit = request.form['benefit']
         
         emp_image_file = request.files['emp_image_file']
 
-        insert_sql = "INSERT INTO employee VALUES (%s, %s, %s, %s, %s)"
+        insert_sql = "INSERT INTO employee VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s)"
         cursor = db_conn.cursor()
         if emp_image_file.filename == "":
             return "Please select a file"
 
          try:
 
-            cursor.execute(insert_sql, (emp_id, first_name, last_name, pri_skill, location))
+            cursor.execute(insert_sql, (emp_id, first_name, last_name, pri_skill, location, salary, position, phone_no, benefit))
             db_conn.commit()
             emp_name = "" + first_name + " " + last_name
             # Uplaod image file in S3 #
@@ -156,7 +152,7 @@ def AddEmp():
             s3 = boto3.resource('s3')
 
         try:
-            print("Data inserted in MySQL RDS... uploading image to S3...")
+            print("Uploading image to S3...")
             s3.Bucket(custombucket).put_object(Key=emp_image_file_name_in_s3, Body=emp_image_file)
             bucket_location = boto3.client('s3').get_bucket_location(Bucket=custombucket)
             s3_location = (bucket_location['LocationConstraint'])
@@ -177,8 +173,8 @@ def AddEmp():
     finally:
         cursor.close()
 
-    print("all modification done...")
-    return render_template('AddEmpOutput.html', name=emp_name)
+    print("modification done")
+    return render_template('AddEmpOutput.html', name=emp_name, id=emp_id)
 
     else:
         return render_template('GetEmp.html', AddEmp=AddEmp)
@@ -191,25 +187,32 @@ def EditEmp():
         last_name = request.form['last_name']
         pri_skill = request.form['pri_skill']
         location = request.form['location']
+        salary = request.form['salary']
+        position = request.form['position']
+        phone_no = request.form['phone_no']
+        benefit = request.form['benefit']
+        emp_id = request.form['emp_id']
+        emp_image_file = request.form['emp_image_file']
 
-        update_SQL = "UPDATE employee SET first_name = %s, last_name = %s, pri_skill = %s, location = %s WHERE emp_id = %s"
+        update_SQL = "UPDATE employee SET first_name = %s, last_name = %s, pri_skill = %s, location = %s, salary = %s, position = %s, phone_no = %s, benefit = %s WHERE emp_id = %s"
         cursor = db_conn.cursor()
 
-        changeField = (first_name, last_name, pri_skill, location, emp_id)
+        changeField = (first_name, last_name, pri_skill, location, salary, position, phone_no, benefit, emp_id)
 
-        try:cursor.execute(update_SQL, (changeField)
-        db_conn.commit()
-        emp_name = "" + first_name + "" + last_name
+        try:
+            cursor.execute(update_SQL, (changeField)
+            db_conn.commit()
+            emp_name = "" + first_name + "" + last_name
 
-        if emp_image_file.filename == "":
-            print("Select Nothing")
-        else 
-            s3_client = boto3.client('s3')
-            emp_image_file_name_in_s3 = "emp-id-" + str(emp_id) + "_image_file"
-            s3_client.delete_object(Bucket=custombucket, Key = emp_image_file_name_in_s3)
+            if emp_image_file.filename == "":
+                print("Select Nothing")
 
-            # upload an image in s3#
-            s3 = boto3.resource('s3')
+            else 
+                s3_client = boto3.client('s3')
+                emp_image_file_name_in_s3 = "emp-id-" + str(emp_id) + "_image_file"
+                s3_client.delete_object(Bucket=custombucket, Key = emp_image_file_name_in_s3)
+                #upload image to s3
+                s3 = boto3.resource('s3')
 
             try:
                 print("Uploading image to s3...")
@@ -227,12 +230,34 @@ def EditEmp():
             except Exception as e:
                 return str(e)
             
-            print("done")
+            print("modification done")
             return render_template('AddEmpOutput.html', name=emp_name. id=emp_id)
         else:
             return render_template('GetEmp.html', AddEmp=AddEmp)
             
+@app.route("/editbenefit-emp", methods=['GET','POST'])
+def EditBenefitEmp():
+    if request.method == 'POST':
+        emp_id = request.form['emp_id']
+        benefit = request.form['benefit']
 
+        update_SQL = "UPDATE employee SET benefit = %s WHERE emp_id = %s"
+        cursor = db_conn.cursor()
+
+        changeField = (benefit, emp_id)
+
+        try:
+            cursor.execute(update_SQL, (changeField))
+            db_conn.commit()
+
+        finally:
+            cursor.close()
+        
+        print("modification done")
+        return render_template('EditBenefitSuccess.html')
+
+    else:
+        return render_template('GetEmp.html', AddEmp=AddEmp)
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=80, debug=True)
