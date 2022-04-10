@@ -59,7 +59,7 @@ def fetchData():
             (id,fname,lname,priSkill,location,hiredate,salary,position,phone_no,benefit) = emp[0]
             image_URL = show_image(custombucket)
 
-            att_emp_SQL = "SELECT attendance.date, attendance.time, attendance.att_values FROM attendance 
+            att_emp_SQL = "SELECT attendance.date, attendance.time, attendance.status FROM attendance 
             INNER JOIN employee ON attendance.emp_id WHERE employee.emp_id = %s"
             mycursor = db_conn.cursor()
             mycursor.execute(att_emp_SQL, (emp_id))
