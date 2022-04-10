@@ -6,13 +6,15 @@
 <center>
 	<font color="black" size="5" style="font-family: avenir">
 
-		<h1 style="color: DodgerBlue">Employee Information</h1>
+		<h1 style="color: DodgerBlue">Get Employee Information</h1>
 
 		<body bgcolor="lightgrey">
 
-			<form>
+			<form action="/fetchdata" autocomplete="on" method = "GET" >
 
 				<div>
+
+					{% endfor %}
 
 			  		Employee ID:<br> {{ id }} <br><br>
 
@@ -23,6 +25,14 @@
 			  		Primary Interest:<br> {{ interest }} <br><br>
 
 			  		Location:<br> {{ location }} <br><br>
+					
+					Salary:<br> RM{{ "{:.2f}".format(salary) }} <br><br>
+
+					Position:<br> {{ position }} <br><br>
+
+					Phone Number:<br> {{ phone_no }} <br><br>
+
+					Benefit:<br> {{ benefit }} <br><br>
 
 			  		Image URL: <br> {{ image_url }} <br><br>
 
