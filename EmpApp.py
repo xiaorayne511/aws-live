@@ -61,7 +61,7 @@ def showimage(bucket):
         pass
     return public_urls
 
-@app.route("/addemp", methods=['GET','POST'])
+@app.route("/addemp", methods=['GET','POST'], endpoint='AddEmp')
 def AddEmp():
     emp_id = request.form['emp_id']
     fname = request.form['fname']
@@ -115,7 +115,7 @@ def AddEmp():
     print("all modification done...")
     return render_template('AddEmpOutput.html', name=emp_name)
 
-@app.route("/delemp", methods=['GET','POST'])
+@app.route("/delemp", methods=['GET','POST'], endpoint='DeleteEmp')
 def DeleteEmp():
     emp_id = request.form['emp_id']
 
@@ -126,7 +126,7 @@ def DeleteEmp():
 
     return render_template('DelEmpOut.html', emp_id=emp_id)
 
-@app.route("/getemp", methods=['GET', 'POST'])
+@app.route("/getemp", methods=['GET', 'POST'], endpoint='GetEmp')
 def GetEmp():
     if request.method == 'POST':
         try:
@@ -149,7 +149,7 @@ def GetEmp():
             ,location=location,hire_date=hire_date,salary=salary,position=position,phone_no=phone_no,benefit=benefit,
             image_URL=image_URL)
 
-@app.route("/attendanceemp", methods=['GET','POST'])
+@app.route("/attendanceemp", methods=['GET','POST'], endpoint='AttendanceEmp')
 def AttendanceEmp():
     
     attendance_id = request.form['attendance_id'] 
@@ -173,7 +173,7 @@ def AttendanceEmp():
 
     return render_template('AddEmpOutput.html')
 
-@app.route("/editemp", methods=['GET','POST'])
+@app.route("/editemp", methods=['GET','POST'], endpoint='EditEmp')
 def EditEmp():
         emp_id = request.form['emp_id']
         fname = request.form['fname']
