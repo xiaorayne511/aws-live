@@ -2,23 +2,56 @@
 <html>
 <style>
     body { 
-  margin: 0;
   font-family: sans-serif; 
-  font-weight: bold;
     background-image: url('static/image/bg.jpg');
   background-repeat: no-repeat;
   background-attachment: fixed;  
   background-size: cover;
   
 }
+    
+.header {
+  overflow: hidden;
+  background-color: #3c75d2;
+  padding: 5px 50px 10px 40px;
+}
+
+.header a {
+  float: left;
+  color: white;
+  text-align: center;
+  padding: 12px;
+  text-decoration: none;
+  font-size: 30px; 
+  line-height: 25px;
+  border-radius: 6px;
+  font-family:verdana;
+}
+
+a:hover {
+  background-color: rgb(103, 16, 146);
+}
 </style>
 <head>
 	<title>About Us</title>
 </head>
 
-<body>
-  <div class="header">
-  <a href="/">Home</a>
+<body bgcolor="lightgrey">
+  <center>
+  <font color="black" size="4" style="font-family: avenir">
+
+		<h1 style="margin-left:30px;margin-top:50px;margin-bottom:50px;color: DodgerBlue;font-family:verdana">Employee Database</h1>
+
+        <div class="header">
+			<div class="header-right">
+			<a style="margin-left:60px;" href="/">Home</a>
+			<a style="margin-left:80px;" href="/addnewemp">Add Employee</a>
+			<a style="margin-left:80px;" href="/delemp">Remove Employee</a>
+			<a style="margin-left:80px;" href="/getemp">Search Employee</a>
+			<a style="margin-left:80px;" href="/empatt">Attendance</a>
+			<a style="margin-left:80px;" href="/about">About</a>
+			</div>
+  
 </div>
     <h1>About Us</h1>
     <p>An Employee Database Management System is created by us.</p>
@@ -26,4 +59,5 @@
         Elastic Load Balancer and S3. The front end using HTML, CSS and Javascript, MySQL used as Database
         and backend using Python.
     </p>
+  </center>
 </body>
