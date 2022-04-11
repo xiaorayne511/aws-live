@@ -25,8 +25,8 @@ table = 'employee'
 def home():
     return render_template('Home.html')
 
-@app.route("/addnewemp", methods=['GET','POST']) 
-def home():
+@app.route("/addemp", methods=['GET','POST']) 
+def AddEmp():
     return render_template('AddEmp.html')
 
 @app.route("/getemp", methods=['GET','POST'])
@@ -34,15 +34,15 @@ def GetEmp():
     return render_template('GetEmp.html')
 
 @app.route("/editemp", methods=['GET','POST'])
-def diredit():
+def EditEmp():
     return render_template('UpdateEmp.html')
 
 @app.route("/attendanceemp", methods=['GET','POST'])
-def diratt():
+def AttendanceEmp():
     return render_template('TakeAttendance.html')
 
 @app.route("/delemp", methods=['GET','POST'])
-def diratt():
+def DeleteEmp():
     return render_template('DelEmp.html')
 
 @app.route("/about", methods=['POST'])
@@ -126,8 +126,8 @@ def DeleteEmp():
 
     return render_template('DelEmpOut.html', emp_id=emp_id)
 
-@app.route("/fetchdata", methods=['GET', 'POST'])
-def fetchData():
+@app.route("/getemp", methods=['GET', 'POST'])
+def GetEmp():
     if request.method == 'POST':
         try:
             emp_id = request_form['emp_id']
@@ -143,7 +143,6 @@ def fetchData():
             ,location=location,hire_date=hire_date,salary=salary,position=position,phone_no=phone_no,benefit=benefit,
             image_URL=image_URL)
 
-
 @app.route("/attendanceemp", methods=['GET','POST'])
 def AttendanceEmp():
     
@@ -157,11 +156,10 @@ def AttendanceEmp():
     cursor = db_conn.cursor()
    
     try:
-
         cursor.execute(insert_sql, (attendance_id, date, time, status, emp_id))
         db_conn.commit()
 
-        except Exception as e:
+    except Exception as e:
             return str(e)
 
     finally:
@@ -170,7 +168,7 @@ def AttendanceEmp():
     return render_template('AddEmpOutput.html')
 
 @app.route("/editemp", methods=['GET','POST'])
-def empedit():
+def EditEmp():
         emp_id = request.form['emp_id']
         fname = request.form['fname']
         lname = request.form['lname']
