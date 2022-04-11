@@ -143,7 +143,6 @@ def GetEmp():
             ,location=location,hire_date=hire_date,salary=salary,position=position,phone_no=phone_no,benefit=benefit,
             image_URL=image_URL)
 
-
 @app.route("/attendanceemp", methods=['GET','POST'])
 def AttendanceEmp():
     now = datetime.now()
@@ -159,11 +158,10 @@ def AttendanceEmp():
     cursor = db_conn.cursor()
    
     try:
-
         cursor.execute(insert_sql, (attendance_id, date, time, status, emp_id))
         db_conn.commit()
 
-        except Exception as e:
+    except Exception as e:
             return str(e)
 
     finally:
