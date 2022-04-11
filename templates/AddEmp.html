@@ -14,7 +14,7 @@
 	  text-align: center;
 	  padding: 12px;
 	  text-decoration: none;
-	  font-size: 24px; 
+	  font-size: 23px; 
 	  line-height: 25px;
 	  border-radius: 6px;
 	  font-family:verdana;
@@ -49,9 +49,9 @@
 
 		<body bgcolor="white">
 
-			<form action="/addemp" autocomplete="on" method = "POST" enctype="multipart/form-data">
+			<h1 style="color: DodgerBlue"> Add Employee </h1>
 
-				<button type="submit" formaction="/getemp" style="background: grey; height: 45px; width: 200px; color:white; font:oblique;">GET EMPLOYEE INFORMATION</button><br><br>
+			<form action="/addemp" autocomplete="on" method = "POST" enctype="multipart/form-data">
 
 		  		Employee ID:<br> <input style="height:25px;font-size:14pt; color:grey;" type="number" name="emp_id" autofocus size="40" placeholder="Enter Employee ID" required><br><br>
 
@@ -79,7 +79,7 @@
 
 		  		Image: <input type=file name="emp_image_file" style="height:25px;font-size:14pt;color:grey" onchange="loadFile(event);"> <br><br>
 
-		  		<button type="submit" style="background: grey; height: 45px; width: 200px; color: white; size: 5; font:oblique;">ADD EMPLOYEE</button>
+		  		<button type="submit" style="background: black; height: 45px; width: 200px; color: white; size: 5; font:oblique;">ADD EMPLOYEE</button>
 
 			</form>
 		</body>

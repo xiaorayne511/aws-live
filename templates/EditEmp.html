@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html>
+	<style>
+    
+		.header {
+	  overflow: hidden;
+	  background-color: #3c75d2;
+	  padding: 5px 50px 10px 40px;
+	}
+	
+	.header a {
+	  float: left;
+	  color: white;
+	  text-align: center;
+	  padding: 12px;
+	  text-decoration: none;
+	  font-size: 23px; 
+	  line-height: 25px;
+	  border-radius: 6px;
+	  font-family:verdana;
+	}
+	
+	a:hover {
+	  background-color: rgb(103, 16, 146);
+	}
+	</style>
+<head>
+	<title>Update Employee Information</title>
+</head>
+<center>
+	<body bgcolor="white">
+		<center>
+			<font color="black" size="4" style="font-family: avenir">
+
+		<h1 style="color: DodgerBlue">Employee Database Management System</h1>
+		
+				<div class="header">
+					<div class="header-right">
+						<a style="margin-left:60px;" href="/">Home</a>
+						<a style="margin-left:80px;" href="/addnewemp">Add Employee</a>
+						<a style="margin-left:80px;" href="/getemp">Search Employee</a>
+						<a style="margin-left:80px;" href="/editemp">Edit Employee</a>
+						<a style="margin-left:80px;" href="/delemp">Remove Employee</a>
+						<a style="margin-left:80px;" href="/empatt">Attendance</a>
+						<a style="margin-left:80px;" href="/about">About Us</a>
+					</div>
+		  
+		</div>
+
+		<h1 style="color: DodgerBlue">Edit Employee Information</h1>
+
+
+			<form action="/edit" autocomplete="on" method = "POST" enctype="multipart/form-data">
+
+				<button type="submit" formaction="/getemp" style="background: black; height: 45px; width: 200px; color:white; font:oblique;">GET EMPLOYEE INFORMATION</button><br><br>
+
+		  		Employee ID:<br> <input style="height:25px;font-size:14pt; color:grey;" type="number" name="emp_id" autofocus size="40"><br><br>
+
+		  		First Name:<br> <input style="height:25px;font-size:14pt;color:grey;" type="text" name="first_name" ><br><br>
+
+		  		Last Name:<br> <input style="height:25px;font-size:14pt;color:grey;" type="text" name="last_name"><br><br>
+
+		  		Primary Skills:<br> <input style="height:25px;font-size:14pt;color:grey;" type="text" name="pri_skill"><br><br>
+
+		  		Location:<br> <input style="height:25px;font-size:14pt;color:grey;" type="text" name="location"><br><br>
+
+		  		Salary:<br> <input style="height:25px;font-size:14pt;color:grey;" type="text" name="salary"><br><br>
+				  
+		  		Position:<br> <input style="height:25px;font-size:14pt;color:grey;" type="text" name="position"><br><br>
+
+		  		Phone Number:<br> <input style="height:25px;font-size:14pt;color:grey;" type="text" name="phone_no"><br><br>
+
+		  		Benefits:<br> 
+				  <input type="checkbox" name="benefit" value="Transportation Allowance" >Insurance medical care<br>
+				  <input type="checkbox" name="benefit" value="Medical Insurance" >Insurance medical care<br>
+				  <input type="checkbox" name="benefit" value="Staff Training Program" >Free transportation<br>
+				  <br><br>
+
+
+		  		<button type="submit" style="background: black; height: 45px; width: 200px; color: white; size: 5; font:oblique;">UPDATE DATABASE</button>
+
+			</form>
+		</body>
+
+		<script>
+			var loadFile = function(event) {
+				var image = document.getElementById('output');
+				image.src = URL.createObjectURL(event.target.files[0]);
+			};
+			</script>
+
+	</font>
+</center>
+</html>
