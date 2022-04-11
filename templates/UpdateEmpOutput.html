@@ -1,6 +1,18 @@
 <!DOCTYPE html>
 <html>
 <head>
+	<style>
+		#button {
+            width: auto;
+            border: 2px solid white;
+            border-radius: 5px;
+			height: 50px;
+			 text-align:center;
+			 padding-top:10px;
+			 size: 55px;
+			
+        }
+	</style>
 <center>
 	<font color="DodgerBlue" size="5" style="font-family: avenir">
 		<body bgcolor="lightgrey">
@@ -8,11 +20,11 @@
 			<h2>The Employee has been updated in the database</h2><br>
 			<h2>{{ name }}</h2><br>
 			<title>Update Emp Output</title>
-				<form action="http://3.134.115.108:80/" autocomplete="on" method = "GET">
+			<form action="http://3.134.115.108:80/" autocomplete="on" method = "GET">
 
-					<button type="submit" style="background: grey; height: 45px; width: 200px; color:white; font:oblique;">GO BACK</button><br><br>
+				<div id="button"><a href="/home">Homepage</a></div><br><br>
 
-				</form>
+			</form>
 		</body>
 	</font>
 </center>

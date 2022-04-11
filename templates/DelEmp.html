@@ -1,26 +1,22 @@
 <!DOCTYPE html>
 <html>
 <head>
-
-
-	<body>
-
-			
-<center>
-	<font color="Black" size="5" style="font-family: avenir">
-		<div id="bgBox">
-			<h1>Delete Successfully !</h1>
-			<h3>Employee ID: {{ emp_id }} has been removed from database</h3><br>
-			<title>Remove Employee</title>
-				<form action="http://3.134.115.108:80/" autocomplete="on" method = "GET">
-
-					<div id="button"><a href="/delemp">Delete Another Employee</a></div><br><br>
-
-				</form>
-				</div>
+	<center>
+		<font color="black" size="4" style="font-family: avenir">
 	
+			<h1 style="color: DodgerBlue"> Delete Employee</h1>
+	
+			<body bgcolor="lightgrey">
 
-		</body>
+		<form action="/delemp" autocomplete="on" method = "POST" enctype="multipart/form-data">
+			<p> Please enter employee ID:</p>
+			  <br> <input style="height:25px;font-size:14pt; color:grey;" type="number" name="emp_id" autofocus size="40" placeholder="Enter Employee ID" required><br><br>
+
+			  <button type="submit" style="height: 45px; width: 600px; color: rgb(47, 105, 193); font-size: 20px; font:oblique; cursor:pointer">DELETE EMPLOYEE</button><br><br>
+
+		</form>
+
+	</font>
 </center>
 </head>
 <body>

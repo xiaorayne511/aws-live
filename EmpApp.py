@@ -32,6 +32,10 @@ def home():
 def GetEmp():
     return render_template('GetEmp.html')
 
+@app.route("/editemp", methods=['GET','POST'])
+def diredit():
+    return render_template("UpdateEmp.html")
+
 @app.route("/empatt", methods=['GET','POST'])
 def diratt():
     return render_template("TakeAttendance.html")
@@ -42,7 +46,7 @@ def diratt():
 
 @app.route("/about", methods=['POST'])
 def about():
-    return render_template('www.intellipaat.com')
+    return render_template('AboutUs.html')
 
 
 @app.route("/addemp", methods=['POST'])
