@@ -139,6 +139,12 @@ def GetEmp():
             (emp_id,fname,lname,pri_skill,location,hire_date,salary,position,phone_no,benefit) = emp[0]
             image_URL = show_image(custombucket)
 
+        except Exception as e:
+            return str(e)
+
+        finally:
+            cursor.close()
+
             return render_template('GetEmpOutput.html', emp_id=emp_id,fname=fname,lname=lname,pri_skill=pri_skill
             ,location=location,hire_date=hire_date,salary=salary,position=position,phone_no=phone_no,benefit=benefit,
             image_URL=image_URL)
@@ -180,16 +186,14 @@ def EditEmp():
         phone_no = request.form['phone_no']
         benefit = request.form['benefit']
     
-    update_sql = "UPDATE employee SET first_name = %s, last_name = %s, pri_skill = %s, location = %s, hire_date = %s, salary = %s, position = %s, phone_no = %s, benefit = %s WHERE emp_id = %s"
-    cursor = db_conn.cursor()
+        update_sql = "UPDATE employee SET first_name = %s, last_name = %s, pri_skill = %s, location = %s, hire_date = %s, salary = %s, position = %s, phone_no = %s, benefit = %s WHERE emp_id = %s"
+        cursor = db_conn.cursor()
     
-    changefield = (fname, lname, pri_skill, location, hire_date, salary, position, phone_no, benefit, emp_id)
-    cursor.execute(update_sql, (changefield))
-    db_conn.commit()
-    cursor.close()
-    return render_template("UpdateEmpOutput.html")
-
-
+        changefield = (fname, lname, pri_skill, location, hire_date, salary, position, phone_no, benefit, emp_id)
+        cursor.execute(update_sql, (changefield))
+        db_conn.commit()
+        cursor.close()
+        return render_template("UpdateEmpOutput.html")
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=80, debug=True)
