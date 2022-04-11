@@ -12,38 +12,53 @@
 			 size: 55px;
 			
         }
-
-		.header {
-  overflow: hidden;
-  background-color: #3c75d2;
-  padding: 5px 50px 10px 40px;
-}
-	.header a {
-  float: left;
-  color: white;
-  text-align: center;
-  padding: 12px;
-  text-decoration: none;
-  font-size: 30px; 
-  line-height: 25px;
-  border-radius: 6px;
-  font-family:verdana;
-}
-	</style>
+    
+			.header {
+		  overflow: hidden;
+		  background-color: #3c75d2;
+		  padding: 5px 50px 10px 40px;
+		}
+		
+		.header a {
+		  float: left;
+		  color: white;
+		  text-align: center;
+		  padding: 12px;
+		  text-decoration: none;
+		  font-size: 30px; 
+		  line-height: 25px;
+		  border-radius: 6px;
+		  font-family:verdana;
+		}
+		
+		a:hover {
+		  background-color: rgb(103, 16, 146);
+		}
+		</style>
 <center>
-	<font color="DodgerBlue" size="5" style="font-family: avenir">
+	<font color="DodgerBlue" size="4" style="font-family: avenir">
 		<body bgcolor="lightgrey">
-			<body>
-				<div class="header">
-				<a href="/">Home</a>
-		  </div>
+				<center>
+		
+						<h1 style="margin-left:30px;margin-top:50px;margin-bottom:50px;color: DodgerBlue;font-family:verdana">Employee Database</h1>
+				
+						<div class="header">
+							<div class="header-right">
+								<a style="margin-left:60px;" href="/">Home</a>
+								<a style="margin-left:80px;" href="/addnewemp">Add Employee</a>
+								<a style="margin-left:80px;" href="/delemp">Remove Employee</a>
+								<a style="margin-left:80px;" href="/getemp">Search Employee</a>
+								<a style="margin-left:80px;" href="/empatt">Attendance</a>
+								<a style="margin-left:80px;" href="/about">About</a>
+							</div>
+				  
+				</div>
 			<h1>SAVE SUCCESSFUL</h1><br>
 			<h2>The Employee has been updated in the database</h2><br>
 			<h2>{{ name }}</h2><br>
 			<title>Update Emp Output</title>
 			<form action="http://3.134.115.108:80/" autocomplete="on" method = "GET">
 
-				<div id="button"><a href="/home">Homepage</a></div><br><br>
 
 			</form>
 		</body>
