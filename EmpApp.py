@@ -48,6 +48,17 @@ def diratt():
 def about():
     return render_template('AboutUs.html')
 
+def showimage(bucket):
+    s3_client = boto3.client('s3')
+    public_urls = []
+    emp_id = request.form['emp_id']
+    try:
+        for item in s3_client.list_objects(Bucket=bucket)['Contents']:
+            presigned_url = s3_client.generate_presigned_url('get_object', Params = {'Bucket': bucket, 'Key': item['Key']}, ExpiresIn = 100)
+            public_urls.append(presigned_url)
+    except Exception as e:
+        pass
+    return public_urls
 
 @app.route("/addemp", methods=['GET','POST'])
 def AddEmp():
@@ -79,7 +90,7 @@ def AddEmp():
         s3 = boto3.resource('s3')
         
         try:
-            print("Data inserted in MySQL RDS... uploading image to S3...")
+                print("Data inserted in MySQL RDS... uploading image to S3...")
                 s3.Bucket(custombucket).put_object(Key=emp_image_file_name_in_s3, Body=emp_image_file)
                 bucket_location = boto3.client('s3').get_bucket_location(Bucket=custombucket)
                 s3_location = (bucket_location['LocationConstraint'])
@@ -177,17 +188,7 @@ def empedit():
     cursor.close()
     return render_template("UpdateEmpOutput.html")
 
-def showimage(bucket):
-    s3_client = boto3.client('s3')
-    public_urls = []
-    emp_id = request.form['emp_id']
-    try:
-        for item in s3_client.list_objects(Bucket=bucket)['Contents']:
-            presigned_url = s3_client.generate_presigned_url('get_object', Params = {'Bucket': bucket, 'Key': item['Key']}, ExpiresIn = 100)
-            public_urls.append(presigned_url)
-    except Exception as e:
-        pass
-    return public_urls
+
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=80, debug=True)
