@@ -71,7 +71,7 @@ def AddEmp():
 
     try:
 
-        cursor.execute(insert_sql, (emp_id,fname,lname,priSkill,location,hiredate,salary,position,phone_no,benefit))
+        cursor.execute(insert_sql, (emp_id,fname,lname,pri_skill,location,hire_date,salary,position,phone_no,benefit))
         db_conn.commit()
         emp_name = "" + fname + " " + lname
         # Uplaod image file in S3 #
@@ -124,11 +124,11 @@ def fetchData():
             fetch_emp_sql = "SELECT * FROM employee WHERE emp_id" = %s"
             cursor.execute(fetch_emp_sql,(emp_id))
             emp = cursor.fetchall()
-            (emp_id,fname,lname,priSkill,location,hiredate,salary,position,phone_no,benefit) = emp[0]
+            (emp_id,fname,lname,pri_skill,location,hire_date,salary,position,phone_no,benefit) = emp[0]
             image_URL = show_image(custombucket)
 
             return render_template('GetEmpOutput.html', emp_id=emp_id,fname=fname,lname=lname,pri_skill=pri_skill
-            ,location=location,hiredate=hire_date,salary=salary,position=position,phone_no=phone_no,benefit=benefit,
+            ,location=location,hire_date=hire_date,salary=salary,position=position,phone_no=phone_no,benefit=benefit,
             image_URL=image_URL)
 
 
