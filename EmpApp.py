@@ -3,7 +3,6 @@ from pymysql import connections
 import os
 import boto3
 from config import *
-from datetime import datetime
 
 app = Flask(__name__)
 
@@ -22,7 +21,7 @@ output = {}
 table = 'employee'
 
 
-@app.route("/addnewemp", methods=['GET','POST'])                                                                                              ", methods=['GET', 'POST'])
+@app.route("/addnewemp", methods=['GET','POST']) 
 def home():
     return render_template('AddEmp.html')
 
@@ -38,11 +37,30 @@ def diratt():
 def diratt():
     return render_template("DelEmp.html")
 
-def show_image(bucket):
-    s3_client = boto3.client('s3')
-    public_URL = []
+@app.route("/about", methods=['POST'])
+def about():
+    return render_template('www.intellipaat.com')
 
+
+@app.route("/addemp", methods=['POST'])
+def AddEmp():
     emp_id = request.form['emp_id']
+    first_name = request.form['first_name']
+    last_name = request.form['last_name']
+    pri_skill = request.form['pri_skill']
+    location = request.form['location']
+    hire_date = request.form['hire_date']
+    salary = request.form['salary']
+    position = request.form['position']
+    phone_no = request.form['phone_no']
+    benefit = request.form['benefit']
+    emp_image_file = request.files['emp_image_file']
+
+    insert_sql = "INSERT INTO employee VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s)"
+    cursor = db_conn.cursor()
+
+    if emp_image_file.filename == "":
+        return "Please select a file"
 
     try:
         for item in s3_client.list_objects(Bucket=bucket)['Contents']:
@@ -120,43 +138,15 @@ def AttendanceEmp():
             finally:
                 cursor.close()
 
-
-@app.route("/addemp", methods=['GET','POST'])
-def AddEmp():
-    if request.method == 'POST':
-        
-        now = datetime.now()
-        datetime_string = now.strftime("%d%m%Y%H%M%S")
-        reg = now.strftime("%d/%m/%Y %H:%M:%S")
-        
-        emp_id = request.form['emp_id']
-        first_name = request.form['first_name']
-        last_name = request.form['last_name']
-        pri_skill = request.form['pri_skill']
-        location = request.form['location']
-        salary = request.form['salary']
-        position = request.form['position']
-        phone_no = request.form['phone_no']
-        benefit = request.form['benefit']
-        
-        emp_image_file = request.files['emp_image_file']
-
-        insert_sql = "INSERT INTO employee VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s)"
-        cursor = db_conn.cursor()
-        if emp_image_file.filename == "":
-            return "Please select a file"
-
-         try:
-
-            cursor.execute(insert_sql, (emp_id, first_name, last_name, pri_skill, location, salary, position, phone_no, benefit))
-            db_conn.commit()
-            emp_name = "" + first_name + " " + last_name
-            # Uplaod image file in S3 #
-            emp_image_file_name_in_s3 = "emp-id-" + str(emp_id) + "_image_file"
-            s3 = boto3.resource('s3')
+        cursor.execute(insert_sql, (emp_id, first_name, last_name, pri_skill, location, hire_date, salary, position, phone_no, benefit))
+        db_conn.commit()
+        emp_name = "" + first_name + " " + last_name
+        # Uplaod image file in S3 #
+        emp_image_file_name_in_s3 = "emp-id-" + str(emp_id) + "_image_file"
+        s3 = boto3.resource('s3')
 
         try:
-            print("Uploading image to S3...")
+            print("Data inserted in MySQL RDS... uploading image to S3...")
             s3.Bucket(custombucket).put_object(Key=emp_image_file_name_in_s3, Body=emp_image_file)
             bucket_location = boto3.client('s3').get_bucket_location(Bucket=custombucket)
             s3_location = (bucket_location['LocationConstraint'])
@@ -177,91 +167,9 @@ def AddEmp():
     finally:
         cursor.close()
 
-    print("modification done")
-    return render_template('AddEmpOutput.html', name=emp_name, id=emp_id)
+    print("all modification done...")
+    return render_template('AddEmpOutput.html', name=emp_name)
 
-    else:
-        return render_template('GetEmp.html', AddEmp=AddEmp)
-
-@app.route("/editemp", methods=['GET','POST'])
-def EditEmp():
-    if request.method == 'POST':
-
-        first_name = request.form['first_name']
-        last_name = request.form['last_name']
-        pri_skill = request.form['pri_skill']
-        location = request.form['location']
-        salary = request.form['salary']
-        position = request.form['position']
-        phone_no = request.form['phone_no']
-        benefit = request.form['benefit']
-        emp_id = request.form['emp_id']
-        emp_image_file = request.form['emp_image_file']
-
-        update_SQL = "UPDATE employee SET first_name = %s, last_name = %s, pri_skill = %s, location = %s, salary = %s, position = %s, phone_no = %s, benefit = %s WHERE emp_id = %s"
-        cursor = db_conn.cursor()
-
-        changeField = (first_name, last_name, pri_skill, location, salary, position, phone_no, benefit, emp_id)
-
-        try:
-            cursor.execute(update_SQL, (changeField)
-            db_conn.commit()
-            emp_name = "" + first_name + "" + last_name
-
-            if emp_image_file.filename == "":
-                print("Select Nothing")
-
-            else 
-                s3_client = boto3.client('s3')
-                emp_image_file_name_in_s3 = "emp-id-" + str(emp_id) + "_image_file"
-                s3_client.delete_object(Bucket=custombucket, Key = emp_image_file_name_in_s3)
-                #upload image to s3
-                s3 = boto3.resource('s3')
-
-            try:
-                print("Uploading image to s3...")
-                s3.Bucket(custombucket).put_object(Key=emp_image_file_name_in_s3, Body=emp_image_file)
-                bucket_location = boto3.client('s3').get_bucket_location(Bucket=custombucket)
-                s3_location = (bucket_location['LocationConstraint'])
-
-                if s3_location is None:
-                    s3_location = ''
-                else:
-                    s3_location = '-' +s3_location
-
-                object_url = "https://s3{0}.amazonaws.com/{1}/{2}".format(s3_location, custombucket, emp_image_file_name_in_s3)
-
-            except Exception as e:
-                return str(e)
-            
-            print("modification done")
-            return render_template('AddEmpOutput.html', name=emp_name. id=emp_id)
-        else:
-            return render_template('GetEmp.html', AddEmp=AddEmp)
-            
-@app.route("/editbenefit-emp", methods=['GET','POST'])
-def EditBenefitEmp():
-    if request.method == 'POST':
-        emp_id = request.form['emp_id']
-        benefit = request.form['benefit']
-
-        update_SQL = "UPDATE employee SET benefit = %s WHERE emp_id = %s"
-        cursor = db_conn.cursor()
-
-        changeField = (benefit, emp_id)
-
-        try:
-            cursor.execute(update_SQL, (changeField))
-            db_conn.commit()
-
-        finally:
-            cursor.close()
-        
-        print("modification done")
-        return render_template('EditBenefitSuccess.html')
-
-    else:
-        return render_template('GetEmp.html', AddEmp=AddEmp)
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=80, debug=True)
