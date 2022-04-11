@@ -34,15 +34,15 @@ def GetEmp():
 
 @app.route("/editemp", methods=['GET','POST'])
 def diredit():
-    return render_template("UpdateEmp.html")
+    return render_template('UpdateEmp.html')
 
 @app.route("/empatt", methods=['GET','POST'])
 def diratt():
-    return render_template("TakeAttendance.html")
+    return render_template('TakeAttendance.html')
 
 @app.route("/delemp", methods=['GET','POST'])
 def diratt():
-    return render_template("DelEmp.html")
+    return render_template('DelEmp.html')
 
 @app.route("/about", methods=['POST'])
 def about():
