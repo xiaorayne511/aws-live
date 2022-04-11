@@ -162,7 +162,6 @@ def AttendanceEmp():
 
         cursor.execute(insert_sql, (attendance_id, date, time, status, emp_id))
         db_conn.commit()
-        status = "Employee " + emp_id + " has checked in." 
 
         except Exception as e:
             return str(e)
