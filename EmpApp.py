@@ -52,8 +52,8 @@ def about():
 @app.route("/addemp", methods=['POST'])
 def AddEmp():
     emp_id = request.form['emp_id']
-    first_name = request.form['first_name']
-    last_name = request.form['last_name']
+    fname = request.form['fname']
+    lname = request.form['lname']
     pri_skill = request.form['pri_skill']
     location = request.form['location']
     hire_date = request.form['hire_date']
@@ -70,13 +70,38 @@ def AddEmp():
         return "Please select a file"
 
     try:
-        for item in s3_client.list_objects(Bucket=bucket)['Contents']:
-            presigned_URL = s3._client.generate_presigned_URL('get_object', Params = {'Bucket': bucket, 'Key': item['Key']}, ExpiresIn = 100)
-            if emp_id in presigned_URL:
-                public_URL.append(presigned_URL)
+
+        cursor.execute(insert_sql, (emp_id,fname,lname,priSkill,location,hiredate,salary,position,phone_no,benefit))
+        db_conn.commit()
+        emp_name = "" + fname + " " + lname
+        # Uplaod image file in S3 #
+        emp_image_file_name_in_s3 = "emp-id-" + str(emp_id) + "_image_file"
+        s3 = boto3.resource('s3')
+        
+    try:
+        print("Data inserted in MySQL RDS... uploading image to S3...")
+            s3.Bucket(custombucket).put_object(Key=emp_image_file_name_in_s3, Body=emp_image_file)
+            bucket_location = boto3.client('s3').get_bucket_location(Bucket=custombucket)
+            s3_location = (bucket_location['LocationConstraint'])
+
+            if s3_location is None:
+                s3_location = ''
+            else:
+                s3_location = '-' + s3_location
+
+            object_url = "https://s3{0}.amazonaws.com/{1}/{2}".format(
+                s3_location,
+                custombucket,
+                emp_image_file_name_in_s3)
+
         except Exception as e:
-            pass
-        return public_URL
+            return str(e)
+
+    finally:
+        cursor.close()
+
+    print("all modification done...")
+    return render_template('AddEmpOutput.html', name=emp_name)
 
 @app.route("/delemp", methods=['GET",'POST'])
 def DeleteEmp():
@@ -99,17 +124,13 @@ def fetchData():
             fetch_emp_sql = "SELECT * FROM employee WHERE emp_id" = %s"
             cursor.execute(fetch_emp_sql,(emp_id))
             emp = cursor.fetchall()
-
-            (id,fname,lname,priSkill,location,hiredate,salary,position,phone_no,benefit) = emp[0]
+            (emp_id,fname,lname,priSkill,location,hiredate,salary,position,phone_no,benefit) = emp[0]
             image_URL = show_image(custombucket)
 
-            return render_template('GetEmpOutput.html', id=id,fname=fname,lname=lname,priSkill=priSkill
-            ,location=location,hiredate=hiredate,salary=salary,position=position,phone_no=phone_no,benefit=benefit,
-            image_URL=image_URL,att_result=att_result)
-            except Exception as e:
-                return render_template('IdNotFound.html')
-            else:
-                return render_template('AddEmp.html', fetchdata=fetchdata)
+            return render_template('GetEmpOutput.html', emp_id=emp_id,fname=fname,lname=lname,pri_skill=pri_skill
+            ,location=location,hiredate=hire_date,salary=salary,position=position,phone_no=phone_no,benefit=benefit,
+            image_URL=image_URL)
+
 
 @app.route("/attendanceemp", methods=['GET','POST'])
 def AttendanceEmp():
@@ -133,6 +154,28 @@ def AttendanceEmp():
 
     print("all modification done...")
     return render_template('AddEmpOutput.html', name=emp_name)
+
+@app.route("/edit", methods=['GET','POST'])
+def empedit():
+        emp_id = request.form['emp_id']
+        fname = request.form['fname']
+        lname = request.form['lname']
+        pri_skill = request.form['pri_skill']
+        location = request.form['location']
+        hire_date = request.form['hire_date']
+        salary = request.form['salary']
+        position = request.form['position']
+        phone_no = request.form['phone_no']
+        benefit = request.form['benefit']
+    
+    update_sql = "UPDATE employee SET first_name = %s, last_name = %s, pri_skill = %s, location = %s, hire_date = %s, salary = %s, position = %s, phone_no = %s, benefit = %s WHERE emp_id = %s"
+    cursor = db_conn.cursor()
+    
+    changefield = (fname, lname, pri_skill, location, hire_date, salary, position, phone_no, benefit, emp_id)
+    cursor.execute(update_sql, (changefield))
+    db_conn.commit()
+    cursor.close()
+    return render_template("UpdateEmpOutput.html")
 
 def showimage(bucket):
     s3_client = boto3.client('s3')
