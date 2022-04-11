@@ -132,7 +132,7 @@ def fetchData():
             emp_id = request_form['emp_id']
             cursor = db_conn.cursor()
 
-            fetch_emp_sql = "SELECT * FROM employee WHERE emp_id" = %s"
+            fetch_emp_sql = "SELECT * FROM employee WHERE emp_id = %s"
             cursor.execute(fetch_emp_sql,(emp_id))
             emp = cursor.fetchall()
             (emp_id,fname,lname,pri_skill,location,hire_date,salary,position,phone_no,benefit) = emp[0]
