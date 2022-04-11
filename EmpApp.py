@@ -169,7 +169,7 @@ def AttendanceEmp():
     finally:
         cursor.close()
 
-    return render_template('AddEmpOutput.html', status=status)
+    return render_template('AddEmpOutput.html')
 
 @app.route("/edit", methods=['GET','POST'])
 def empedit():
