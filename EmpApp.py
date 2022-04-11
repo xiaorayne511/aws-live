@@ -3,7 +3,7 @@ from pymysql import connections
 import os
 import boto3
 from config import *
-from datetime import datetime
+
 
 app = Flask(__name__)
 
@@ -146,10 +146,8 @@ def fetchData():
 
 @app.route("/attendanceemp", methods=['GET','POST'])
 def AttendanceEmp():
-    now = datetime.now()
-    dt_string = now.strftime("%d%m%Y%H%M%S")
-
-    attendance_id = request.form['attendance_id'] + dt_string
+    
+    attendance_id = request.form['attendance_id'] 
     date = request.form['date']
     time = request.form['time']
     status = request.form['status']
