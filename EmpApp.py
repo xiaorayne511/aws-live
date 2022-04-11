@@ -61,7 +61,7 @@ def showimage(bucket):
         pass
     return public_urls
 
-@app.route("/addemp", methods=['GET','POST'])
+@app.route("/addemp", methods=['GET','POST'], endpoint='AddEmp')
 def AddEmp():
     emp_id = request.form['emp_id']
     first_name = request.form['first_name']
@@ -85,7 +85,7 @@ def AddEmp():
 
         cursor.execute(insert_sql, (emp_id,first_name,last_name,pri_skill,location,hire_date,salary,position,phone_no,benefit))
         db_conn.commit()
-        emp_name = "" + fname + " " + lname
+        emp_name = "" + first_name + " " + last_name
         # Uplaod image file in S3 #
         emp_image_file_name_in_s3 = "emp-id-" + str(emp_id) + "_image_file"
         s3 = boto3.resource('s3')
@@ -115,7 +115,7 @@ def AddEmp():
     print("all modification done...")
     return render_template('AddEmpOutput.html', name=emp_name)
 
-@app.route("/delemp", methods=['GET','POST'])
+@app.route("/delemp", methods=['GET','POST'], endpoint='DeleteEmp')
 def DeleteEmp():
     emp_id = request.form['emp_id']
 
@@ -126,7 +126,7 @@ def DeleteEmp():
 
     return render_template('DelEmpOut.html', emp_id=emp_id)
 
-@app.route("/getemp", methods=['GET', 'POST'])
+@app.route("/getemp", methods=['GET', 'POST'], endpoint='GetEmp')
 def GetEmp():
     if request.method == 'POST':
         try:
@@ -139,11 +139,17 @@ def GetEmp():
             (emp_id,first_name,last_name,pri_skill,location,hire_date,salary,position,phone_no,benefit) = emp[0]
             image_URL = show_image(custombucket)
 
+        except Exception as e:
+            pass
+
+        finally:
+            cursor.close()
+
             return render_template('GetEmpOutput.html', emp_id=emp_id,first_name=first_name,last_name=last_name,pri_skill=pri_skill
             ,location=location,hire_date=hire_date,salary=salary,position=position,phone_no=phone_no,benefit=benefit,
             image_URL=image_URL)
 
-@app.route("/attendanceemp", methods=['GET','POST'])
+@app.route("/attendanceemp", methods=['GET','POST'], endpoint='AttendanceEmp')
 def AttendanceEmp():
     
     attendance_id = request.form['attendance_id'] 
@@ -160,14 +166,14 @@ def AttendanceEmp():
         db_conn.commit()
 
     except Exception as e:
-            return str(e)
+            pass
 
     finally:
         cursor.close()
 
     return render_template('AddEmpOutput.html')
 
-@app.route("/editemp", methods=['GET','POST'])
+@app.route("/editemp", methods=['GET','POST'], endpoint='EditEmp')
 def EditEmp():
         emp_id = request.form['emp_id']
         first_name = request.form['first_name']
@@ -180,16 +186,14 @@ def EditEmp():
         phone_no = request.form['phone_no']
         benefit = request.form['benefit']
     
-    update_sql = "UPDATE employee SET first_name = %s, last_name = %s, pri_skill = %s, location = %s, hire_date = %s, salary = %s, position = %s, phone_no = %s, benefit = %s WHERE emp_id = %s"
-    cursor = db_conn.cursor()
+        update_sql = "UPDATE employee SET first_name = %s, last_name = %s, pri_skill = %s, location = %s, hire_date = %s, salary = %s, position = %s, phone_no = %s, benefit = %s WHERE emp_id = %s"
+        cursor = db_conn.cursor()
     
-    changefield = (first_name, last_name, pri_skill, location, hire_date, salary, position, phone_no, benefit, emp_id)
-    cursor.execute(update_sql, (changefield))
-    db_conn.commit()
-    cursor.close()
-    return render_template("UpdateEmpOutput.html")
-
-
+        changefield = (first_name, last_name, pri_skill, location, hire_date, salary, position, phone_no, benefit, emp_id)
+        cursor.execute(update_sql, (changefield))
+        db_conn.commit()
+        cursor.close()
+        return render_template("UpdateEmpOutput.html")
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=80, debug=True)
