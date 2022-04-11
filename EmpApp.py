@@ -137,7 +137,7 @@ def DeleteEmp():
     
         return render_template('DelEmpOut.html', emp_id=emp_id)
     except Exception as e:
-        return render_template('Unsuccessful.html')
+        return render_template('DelEmp.html')
 
 @app.route("/getemp", methods=['GET', 'POST'], endpoint='GetEmp')
 def GetEmp():
@@ -162,9 +162,9 @@ def GetEmp():
             image_URL=image_URL,status=status)
             
         except Exception as e:
-            return render_template('NotFound.html')
+            return render_template('GetEmp.html')
     else:
-        return render_template('AddEmp.html', GetEmp=GetEmp)
+        return render_template('GetEmpOutput.html', GetEmp=GetEmp)
 
 @app.route("/attendanceemp", methods=['GET','POST'], endpoint='AttendanceEmp')
 def AttendanceEmp():
@@ -190,7 +190,7 @@ def AttendanceEmp():
         cursor.execute(insert_sql, (attendance_id, date, time, status, emp_id))
         db_conn.commit()
 
-        return render_template('Successfully.html', id = attendance_id)
+        return render_template('TakeAttendanceOutput.html', id = attendance_id)
         
     except Exception as e:
             return str(e)
@@ -239,24 +239,9 @@ def EditEmp():
         cursor.close()
 
     print("all modification done...")
-    return render_template("UpdateEmpOutput.html")
+    return render_template("EditEmpOutput.html")
 
-@app.route("/editBenefit", methods=['GET', 'POST'])
-def EditBenefit():
-    if request.method == 'POST':
-        emp_id = request.form['emp_id']
-        benefit = request.form['benefit']
 
-        update_sql = "UPDATE employee SET benefit = %s WHERE emp_id = %s"
-        cursor = db_conn.cursor()
-
-        changefield = (benefit,emp_id)
-
-        try:
-            cursor.execute(update_sql, (changefield))
-            db_conn.commit()
-        finally:
-            cursor.close()
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=80, debug=True)
