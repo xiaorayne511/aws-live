@@ -140,7 +140,7 @@ def GetEmp():
             image_URL = show_image(custombucket)
 
         except Exception as e:
-            return str(e)
+            pass
 
         finally:
             cursor.close()
@@ -166,7 +166,7 @@ def AttendanceEmp():
         db_conn.commit()
 
     except Exception as e:
-            return str(e)
+            pass
 
     finally:
         cursor.close()
