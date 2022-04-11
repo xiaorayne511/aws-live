@@ -78,7 +78,7 @@ def AddEmp():
             pass
         return public_URL
 
-@app.route("/delete-emp", methods=['GET",'POST'])
+@app.route("/delemp", methods=['GET",'POST'])
 def DeleteEmp():
     emp_id = request.form['emp_id']
 
@@ -103,12 +103,6 @@ def fetchData():
             (id,fname,lname,priSkill,location,hiredate,salary,position,phone_no,benefit) = emp[0]
             image_URL = show_image(custombucket)
 
-            att_emp_SQL = "SELECT attendance.date, attendance.time, attendance.status FROM attendance 
-            INNER JOIN employee ON attendance.emp_id WHERE employee.emp_id = %s"
-            mycursor = db_conn.cursor()
-            mycursor.execute(att_emp_SQL, (emp_id))
-            att_result = mycursor.fetchall()
-
             return render_template('GetEmpOutput.html', id=id,fname=fname,lname=lname,priSkill=priSkill
             ,location=location,hiredate=hiredate,salary=salary,position=position,phone_no=phone_no,benefit=benefit,
             image_URL=image_URL,att_result=att_result)
@@ -119,54 +113,17 @@ def fetchData():
 
 @app.route("/attendanceemp", methods=['GET','POST'])
 def AttendanceEmp():
-    if request.method == "POST":
-        now = datetime.now()
-        datetime_string = now.strftime("%d%m%Y%H%M%S")
-        date_string = now.strftime("%d/%m/%Y")
-        time_string = now.strftime("%H:%M:%S")
+    emp_id = request.form['emp_id']
+    date = request.form['date']
+    time = request.form['time']
 
-        attendance_id = request.form['attendance_id'] + datetime_string
-        date = request.form['date'] + date_string
-        time = request.form['time'] + time_string
-        attendance = request.form.getlist('attendance')
-        emp_id = request.form['emp_id']
+    insert_sql = "INSERT INTO attendance VALUES (%s, %s, %s)"
+    cursor = db_conn.cursor()
+   
+    try:
 
-        attendance = ','.join(attendance)
-
-        try:
-            insert_attendance_SQL = 'INSERT INTO attendance VALUES (%s,%s,%s,%s)'
-            cursor = db_conn.cursor()
-            cursor.execute(insert_attendance_SQL, (attendance_id,date,time,emp_id))
-            db_conn.commit()
-
-            return render_template('TakeAttendanceOutput.html', Od = attendance_id)
-            except Exception as e:
-                return str(e)
-            finally:
-                cursor.close()
-
-        cursor.execute(insert_sql, (emp_id, first_name, last_name, pri_skill, location, hire_date, salary, position, phone_no, benefit))
+        cursor.execute(insert_sql, (emp_id, date, time))
         db_conn.commit()
-        emp_name = "" + first_name + " " + last_name
-        # Uplaod image file in S3 #
-        emp_image_file_name_in_s3 = "emp-id-" + str(emp_id) + "_image_file"
-        s3 = boto3.resource('s3')
-
-        try:
-            print("Data inserted in MySQL RDS... uploading image to S3...")
-            s3.Bucket(custombucket).put_object(Key=emp_image_file_name_in_s3, Body=emp_image_file)
-            bucket_location = boto3.client('s3').get_bucket_location(Bucket=custombucket)
-            s3_location = (bucket_location['LocationConstraint'])
-
-            if s3_location is None:
-                s3_location = ''
-            else:
-                s3_location = '-' + s3_location
-
-            object_url = "https://s3{0}.amazonaws.com/{1}/{2}".format(
-                s3_location,
-                custombucket,
-                emp_image_file_name_in_s3)
 
         except Exception as e:
             return str(e)
@@ -177,6 +134,17 @@ def AttendanceEmp():
     print("all modification done...")
     return render_template('AddEmpOutput.html', name=emp_name)
 
+def showimage(bucket):
+    s3_client = boto3.client('s3')
+    public_urls = []
+    emp_id = request.form['emp_id']
+    try:
+        for item in s3_client.list_objects(Bucket=bucket)['Contents']:
+            presigned_url = s3_client.generate_presigned_url('get_object', Params = {'Bucket': bucket, 'Key': item['Key']}, ExpiresIn = 100)
+            public_urls.append(presigned_url)
+    except Exception as e:
+        pass
+    return public_urls
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=80, debug=True)
