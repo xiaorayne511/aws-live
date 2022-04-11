@@ -3,6 +3,7 @@ from pymysql import connections
 import os
 import boto3
 from config import *
+from datetime import datetime
 
 app = Flask(__name__)
 
@@ -143,19 +144,23 @@ def fetchData():
             image_URL=image_URL)
 
 
-@app.route("/attendanceemp", methods=['POST'])
+@app.route("/attendanceemp", methods=['GET','POST'])
 def AttendanceEmp():
-    emp_id = request.form['emp_id']
+    now = datetime.now()
+    dt_string = now.strftime("%d%m%Y%H%M%S")
+
+    attendance_id = request.form['attendance_id'] + dt_string
     date = request.form['date']
     time = request.form['time']
     status = request.form['status']
+    emp_id = request.form['emp_id']
 
-    insert_sql = "INSERT INTO attendance VALUES (%s, %s, %s, %s)"
+    insert_sql = "INSERT INTO attendance VALUES (%s, %s, %s, %s, %s)"
     cursor = db_conn.cursor()
    
     try:
 
-        cursor.execute(insert_sql, (emp_id, date, time, status))
+        cursor.execute(insert_sql, (attendance_id, date, time, status, emp_id))
         db_conn.commit()
         status = "Employee " + emp_id + " has checked in." 
 
