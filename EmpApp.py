@@ -22,13 +22,21 @@ output = {}
 table = 'employee'
 
 
-@app.route("/", methods=['GET', 'POST'])
+@app.route("/addnewemp", methods=['GET','POST'])                                                                                              ", methods=['GET', 'POST'])
 def home():
     return render_template('AddEmp.html')
 
-@app.route("/getemp", methods=['POST'])
+@app.route("/getemp", methods=['GET','POST'])
 def GetEmp():
-    return render_template('GetEmp.html', GetEmp=GetEmp)
+    return render_template('GetEmp.html')
+
+@app.route("/empatt", methods=['GET','POST'])
+def diratt():
+    return render_template("TakeAttendance.html")
+
+@app.route("/delemp", methods=['GET','POST'])
+def diratt():
+    return render_template("DelEmp.html")
 
 def show_image(bucket):
     s3_client = boto3.client('s3')
@@ -44,6 +52,17 @@ def show_image(bucket):
         except Exception as e:
             pass
         return public_URL
+
+@app.route("/delete-emp", methods=['GET",'POST'])
+def DeleteEmp():
+    emp_id = request.form['emp_id']
+
+    mycursor = db.conn.cursor()
+    del_Att_SQL = "DELETE FROM employee WHERE emp_id = %s"
+    mycursor.execute(del_Att_SQL, (emp_id))
+    db_conn.commit()
+
+    return render_template('DelEmpOut.html', emp_id=emp_id)
 
 @app.route("/fetchdata", methods=['GET', 'POST'])
 def fetchData():
@@ -95,7 +114,7 @@ def AttendanceEmp():
             cursor.execute(insert_attendance_SQL, (attendance_id,date,time,emp_id))
             db_conn.commit()
 
-            return render_template('SuccessAttendance.html', Od = attendance_id)
+            return render_template('TakeAttendanceOutput.html', Od = attendance_id)
             except Exception as e:
                 return str(e)
             finally:
