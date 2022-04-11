@@ -28,27 +28,27 @@ def home():
 
 @app.route("/addemp", methods=['GET','POST']) 
 def AddEmp():
-    return render_template('AddEmp.html', AddEmp=AddEmp)
+    return render_template('AddEmp.html')
 
 @app.route("/getemp", methods=['GET','POST'])
 def GetEmp():
-    return render_template('GetEmp.html', GetEmp=GetEmp)
+    return render_template('GetEmp.html')
 
 @app.route("/editemp", methods=['GET','POST'])
 def EditEmp():
-    return render_template('UpdateEmp.html', EditEmp=EditEmp)
+    return render_template('UpdateEmp.html')
 
 @app.route("/attendanceemp", methods=['GET','POST'])
 def AttendanceEmp():
-    return render_template('TakeAttendance.html', AttendanceEmp=AttendanceEmp)
+    return render_template('TakeAttendance.html')
 
 @app.route("/delemp", methods=['GET','POST'])
 def DeleteEmp():
-    return render_template('DelEmp.html', DeleteEmp=DeleteEmp)
+    return render_template('DelEmp.html')
 
 @app.route("/about", methods=['POST'])
 def about():
-    return render_template('AboutUs.html', about=about)
+    return render_template('AboutUs.html')
 
 def showimage(bucket):
     s3_client = boto3.client('s3')
