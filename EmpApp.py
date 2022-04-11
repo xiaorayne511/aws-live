@@ -171,7 +171,7 @@ def AttendanceEmp():
 
     return render_template('AddEmpOutput.html', status=status)
 
-@app.route("/edit", methods=['GET','POST'])
+@app.route("/editemp", methods=['GET','POST'])
 def empedit():
         emp_id = request.form['emp_id']
         fname = request.form['fname']
