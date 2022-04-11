@@ -64,8 +64,8 @@ def showimage(bucket):
 @app.route("/addemp", methods=['GET','POST'])
 def AddEmp():
     emp_id = request.form['emp_id']
-    fname = request.form['fname']
-    lname = request.form['lname']
+    first_name = request.form['first_name']
+    last_name = request.form['last_name']
     pri_skill = request.form['pri_skill']
     location = request.form['location']
     hire_date = request.form['hire_date']
@@ -83,7 +83,7 @@ def AddEmp():
 
     try:
 
-        cursor.execute(insert_sql, (emp_id,fname,lname,pri_skill,location,hire_date,salary,position,phone_no,benefit))
+        cursor.execute(insert_sql, (emp_id,first_name,last_name,pri_skill,location,hire_date,salary,position,phone_no,benefit))
         db_conn.commit()
         emp_name = "" + fname + " " + lname
         # Uplaod image file in S3 #
@@ -136,10 +136,10 @@ def GetEmp():
             fetch_emp_sql = "SELECT * FROM employee WHERE emp_id = %s"
             cursor.execute(fetch_emp_sql,(emp_id))
             emp = cursor.fetchall()
-            (emp_id,fname,lname,pri_skill,location,hire_date,salary,position,phone_no,benefit) = emp[0]
+            (emp_id,first_name,last_name,pri_skill,location,hire_date,salary,position,phone_no,benefit) = emp[0]
             image_URL = show_image(custombucket)
 
-            return render_template('GetEmpOutput.html', emp_id=emp_id,fname=fname,lname=lname,pri_skill=pri_skill
+            return render_template('GetEmpOutput.html', emp_id=emp_id,first_name=first_name,last_name=last_name,pri_skill=pri_skill
             ,location=location,hire_date=hire_date,salary=salary,position=position,phone_no=phone_no,benefit=benefit,
             image_URL=image_URL)
 
@@ -170,8 +170,8 @@ def AttendanceEmp():
 @app.route("/editemp", methods=['GET','POST'])
 def EditEmp():
         emp_id = request.form['emp_id']
-        fname = request.form['fname']
-        lname = request.form['lname']
+        first_name = request.form['first_name']
+        last_name = request.form['last_name']
         pri_skill = request.form['pri_skill']
         location = request.form['location']
         hire_date = request.form['hire_date']
@@ -183,7 +183,7 @@ def EditEmp():
     update_sql = "UPDATE employee SET first_name = %s, last_name = %s, pri_skill = %s, location = %s, hire_date = %s, salary = %s, position = %s, phone_no = %s, benefit = %s WHERE emp_id = %s"
     cursor = db_conn.cursor()
     
-    changefield = (fname, lname, pri_skill, location, hire_date, salary, position, phone_no, benefit, emp_id)
+    changefield = (first_name, last_name, pri_skill, location, hire_date, salary, position, phone_no, benefit, emp_id)
     cursor.execute(update_sql, (changefield))
     db_conn.commit()
     cursor.close()
