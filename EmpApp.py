@@ -143,19 +143,21 @@ def fetchData():
             image_URL=image_URL)
 
 
-@app.route("/attendanceemp", methods=['GET','POST'])
+@app.route("/attendanceemp", methods=['POST'])
 def AttendanceEmp():
     emp_id = request.form['emp_id']
     date = request.form['date']
     time = request.form['time']
+    status = request.form['status']
 
-    insert_sql = "INSERT INTO attendance VALUES (%s, %s, %s)"
+    insert_sql = "INSERT INTO attendance VALUES (%s, %s, %s, %s)"
     cursor = db_conn.cursor()
    
     try:
 
-        cursor.execute(insert_sql, (emp_id, date, time))
+        cursor.execute(insert_sql, (emp_id, date, time, status))
         db_conn.commit()
+        status = "Employee " + emp_id + " has checked in." 
 
         except Exception as e:
             return str(e)
@@ -163,8 +165,7 @@ def AttendanceEmp():
     finally:
         cursor.close()
 
-    print("all modification done...")
-    return render_template('AddEmpOutput.html', name=emp_name)
+    return render_template('AddEmpOutput.html', status=status)
 
 @app.route("/edit", methods=['GET','POST'])
 def empedit():
