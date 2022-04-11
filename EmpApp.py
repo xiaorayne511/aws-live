@@ -37,7 +37,7 @@ def GetEmp():
 def diredit():
     return render_template('UpdateEmp.html')
 
-@app.route("/empatt", methods=['GET','POST'])
+@app.route("/attendanceemp", methods=['GET','POST'])
 def diratt():
     return render_template('TakeAttendance.html')
 
